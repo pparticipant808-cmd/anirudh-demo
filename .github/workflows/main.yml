@@ -1,0 +1,39 @@
+name: Playwright Test Automation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      # Install dependencies (npm install)
+      - name: Install dependencies
+        run: |
+          npm install
+
+      # Install Playwright browsers (optional if you haven't already installed them locally)
+      - name: Install Playwright browsers
+        run: |
+          npx playwright install
+
+      # Run Playwright tests
+      - name: Run Playwright tests
+        run: |
+          npm test
