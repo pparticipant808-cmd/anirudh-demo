@@ -27,5 +27,25 @@ test.describe('OrangeHRM Login Validation Tests', () => {
     // Validate both required field messages appear
     await expect(page.locator('.oxd-input-field-error-message')).toHaveCount(2);
   });
+test('Valid login and logout', async ({ page }) => {
+  await page.goto('https://opensource-demo.orangehrmlive.com/');
 
+  await page.fill('input[name="username"]', 'Admin');
+  await page.fill('input[name="password"]', 'admin123');
+  await page.click('button[type="submit"]');
+
+ 
+  // Now assert dashboard
+  await expect(page).toHaveURL(/dashboard/, { timeout: 15000 });
+  await expect(page.getByRole('heading', { name: 'Dashboard' }))
+    .toBeVisible();
+
+  // Logout
+  await page.locator('.oxd-userdropdown-tab').click();
+
+  await Promise.all([
+    page.waitForURL(/auth\/login/),
+   page.getByText('Logout').click(),
+  ]);
+});
 });
